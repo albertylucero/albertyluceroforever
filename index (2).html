@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los Secretos del Amor — Albert & Lucero</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== PORTADA ===== -->
+<section id="portada">
+  <div class="petals" id="petals-container"></div>
+  <div class="book-badge">✦ Una historia escrita con el corazón ✦</div>
+  <h1 class="book-title">
+    Los Secretos
+    <em>del Amor</em>
+  </h1>
+  <div class="divider-ornament">— ❧ —</div>
+  <p class="book-author">por <span>Albert & Lucero</span></p>
+  <div class="cover-buttons">
+    <button class="btn-primary" onclick="showTOC()">📖 Leer el libro</button>
+    <button class="btn-outline" onclick="showChapter(0)">Comenzar desde el inicio</button>
+  </div>
+</section>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="main-nav" class="hidden">
+  <div class="nav-logo">A&L</div>
+  <div class="nav-chapters" id="nav-chapters-list"></div>
+  <button class="nav-admin-btn" onclick="openPasswordModal()">✦ Autor</button>
+</nav>
+
+<!-- ===== CONTENT ===== -->
+<div id="reader-area" class="hidden">
+
+  <!-- TABLE OF CONTENTS -->
+  <div id="toc-view">
+    <div id="content-area">
+      <div class="chapter-header">
+        <div class="chapter-number">✦ Índice ✦</div>
+        <h1 class="chapter-title">Los Secretos <em>del Amor</em></h1>
+      </div>
+      <div class="toc-grid" id="toc-grid"></div>
+    </div>
+  </div>
+
+  <!-- CHAPTER VIEW -->
+  <div id="chapter-view" class="hidden">
+    <div id="content-area">
+      <div id="chapter-content" class="fade-in"></div>
+      <div class="chapter-nav-footer">
+        <button class="ch-nav-btn" id="prev-btn" onclick="navigateChapter(-1)">← Capítulo anterior</button>
+        <button class="ch-nav-btn" onclick="showTOC()">📖 Índice</button>
+        <button class="ch-nav-btn" id="next-btn" onclick="navigateChapter(1)">Siguiente capítulo →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== MUSIC BAR ===== -->
+<div id="music-bar">
+  <button class="music-icon" id="play-btn" onclick="toggleMusic()">♪</button>
+  <div>
+    <div class="music-info" id="music-title-display">Música de fondo</div>
+    <div class="equalizer" id="eq">
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PASSWORD MODAL ===== -->
+<div id="pwd-overlay">
+  <div class="pwd-modal">
+    <h3>Acceso de autor</h3>
+    <p>Ingresa la contraseña para editar el libro</p>
+    <input type="password" id="pwd-input" placeholder="••••••••••••••••"
+           onkeydown="if(event.key==='Enter') checkPassword()" />
+    <div class="pwd-error" id="pwd-error">Contraseña incorrecta</div>
+    <button class="btn-save" onclick="checkPassword()" style="width:100%">Entrar</button>
+    <br><br>
+    <button class="btn-cancel" onclick="closePwdModal()" style="width:100%; margin-top:0.5rem">Cancelar</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="admin-overlay">
+  <div class="admin-modal">
+    <h2>Panel de autor</h2>
+    <p class="subtitle">Solo tú puedes ver y editar esta sección</p>
+
+    <div class="form-group">
+      <label>Seleccionar capítulo</label>
+      <select id="admin-chapter-select" onchange="loadChapterToAdmin()"></select>
+    </div>
+
+    <div class="form-group">
+      <label>Título del capítulo</label>
+      <input type="text" id="admin-chapter-title" placeholder="Ej: El primer encuentro" />
+    </div>
+
+    <div class="form-group">
+      <label>Contenido del capítulo</label>
+      <textarea id="admin-chapter-content"
+        placeholder="Escribe aquí el contenido del capítulo. Separa los párrafos con una línea en blanco.&#10;&#10;Cuando termines, haz clic en Guardar."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Estado del capítulo</label>
+      <select id="admin-chapter-status">
+        <option value="coming">Próximamente (no visible para lectores)</option>
+        <option value="published">Publicado (visible para lectores)</option>
+      </select>
+    </div>
+
+    <div style="border-top: 1px solid var(--border); padding-top: 1.2rem; margin-top: 0.5rem;">
+      <label style="font-size: 0.82rem; color: var(--muted); letter-spacing:0.05em; text-transform:uppercase; display:block; margin-bottom:0.4rem;">URL de música (YouTube, SoundCloud, etc.)</label>
+      <input type="text" id="admin-music-url" placeholder="https://www.youtube.com/watch?v=..." />
+      <div style="font-size:0.78rem; color:var(--muted); margin-top:0.3rem; font-style:italic;">
+        Pega el enlace directo al audio o video musical
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--border); padding-top: 1.2rem; margin-top: 0.8rem;">
+      <label style="font-size: 0.82rem; color: var(--muted); letter-spacing:0.05em; text-transform:uppercase; display:block; margin-bottom:0.4rem;">Nombre de la música</label>
+      <input type="text" id="admin-music-name" placeholder="Ej: Perfect - Ed Sheeran" />
+    </div>
+
+    <div class="modal-buttons">
+      <button class="btn-save" onclick="saveChapter()">💾 Guardar capítulo</button>
+      <button class="btn-save" onclick="saveMusic()" style="background: var(--gold)">♪ Guardar música</button>
+      <button class="btn-cancel" onclick="closeAdminPanel()">Cerrar</button>
+    </div>
+    <div id="save-feedback" style="font-size:0.82rem; color:#2e7d32; margin-top:0.8rem; display:none; font-style:italic;">
+      ✓ Guardado correctamente
+    </div>
+  </div>
+</div>
+
+<!-- ===== AUDIO ELEMENT ===== -->
+<audio id="bg-audio" loop></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
